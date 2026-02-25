@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weekly Timetable - FocusForge</title>
+  <style>
+    body { margin: 0; font-family: 'Segoe UI', sans-serif; background-color: #f4f6f9; color: #111827; display: flex; flex-direction: column; align-items: center; padding: 40px; }
+    
+    h1 { margin-bottom: 20px; }
+
+    /* Day Selector Tabs */
+    .day-picker { display: flex; gap: 10px; margin-bottom: 30px; flex-wrap: wrap; justify-content: center; }
+    .day-btn { padding: 10px 20px; border: none; background: white; border-radius: 8px; cursor: pointer; font-weight: 600; box-shadow: 0 2px 5px rgba(0,0,0,0.1); transition: 0.3s; }
+    .day-btn:hover { background: #111827; color: white; }
+    .day-btn.active { background: #10b981; color: white; }
+
+    /* Subjects List */
+    .timetable-card { background: white; width: 100%; max-width: 500px; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+    .subject-slot { display: flex; justify-content: space-between; padding: 12px; border-bottom: 1px solid #eee; }
+    .subject-slot:last-child { border-bottom: none; }
+    .period { font-weight: bold; color: #6b7280; }
+
+    .back-link { margin-top: 20px; text-decoration: none; color: #111827; font-weight: 500; }
+  </style>
+</head>
+<body>
+
+  <h1>Weekly Timetable</h1>
+
+  <div class="day-picker">
+    <button class="day-btn active" onclick="showDay('Sunday', this)">Sun</button>
+    <button class="day-btn" onclick="showDay('Monday', this)">Mon</button>
+    <button class="day-btn" onclick="showDay('Tuesday', this)">Tue</button>
+    <button class="day-btn" onclick="showDay('Wednesday', this)">Wed</button>
+    <button class="day-btn" onclick="showDay('Thursday', this)">Thu</button>
+    <button class="day-btn" onclick="showDay('Friday', this)">Fri</button>
+    <button class="day-btn" onclick="showDay('Saturday', this)">Sat</button>
+  </div>
+
+  <div class="timetable-card">
+    <h2 id="current-day">Sunday</h2>
+    <div id="subject-list">
+      </div>
+  </div>
+
+  <a href="FocusForge.html" class="back-link">← Return to Dashboard</a>
+
+  <script>
+    // Example data - you can change these names!
+    const schedule = {
+      "Sunday": ["Math", "Physics", "English", "Break", "History", "Chemistry", "Biology", "Self Study"],
+      "Monday": ["Biology", "Math", "Geography", "Break", "Art", "Physics", "Civics", "Lab"],
+      "Tuesday": ["Chemistry", "English", "Math", "Break", "Computer Science", "PE", "Physics", "Library"],
+      "Wednesday": ["Math", "History", "English", "Break", "Chemistry", "Biology", "Music", "Study Hall"],
+      "Thursday": ["Physics", "Geography", "Math", "Break", "English", "Chemistry", "Art", "Self Study"],
+      "Friday": ["Computer Science", "PE", "English", "Break", "Math", "Physics", "Chemistry", "Biology"],
+      "Saturday": ["Weekend Review", "Free Time", "Project Work", "Lunch", "Exam Prep", "Reading", "Hobby", "Rest"]
+    };
+
+    function showDay(day, btn) {
+      // Update Title
+      document.getElementById('current-day').innerText = day;
+      
+      // Update Active Button
+      document.querySelectorAll('.day-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      // Update List
+      const list = document.getElementById('subject-list');
+      list.innerHTML = ""; // Clear old list
+
+      schedule[day].forEach((subject, index) => {
+        const div = document.createElement('div');
+        div.className = 'subject-slot';
+        div.innerHTML = `<span class="period">Period ${index + 1}</span> <span>${subject}</span>`;
+        list.appendChild(div);
+      });
+    }
+
+    // Initialize with Sunday
+    showDay('Sunday', document.querySelector('.day-btn'));
+  </script>
+</body>
+</html>
