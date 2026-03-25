@@ -53,36 +53,69 @@
         <a href="FocusForge.html" style="text-decoration: none; color: #94a3b8;">← Back to Dashboard</a>
     </div>
 
-    <script>
-        // 1. Theme Check
-        if (localStorage.getItem('theme') === 'dark') document.body.classList.add('dark-theme');
+   <script>
+    // 1. Theme Check (Stay Dark if Dashboard is Dark)
+    if (localStorage.getItem('theme') === 'dark') document.body.classList.add('dark-theme');
 
-        // 2. Identify "Today" from System Clock
-        const todayIndex = new Date().getDay(); // 0=Sun, 1=Mon...
-        document.getElementById(`day-${todayIndex}`).classList.add('today');
+    // 2. Identify "Today" (0=Sun, 1=Mon, etc.)
+    const todayIndex = new Date().getDay(); 
+    // Match Sunday(0) to our ID system if needed, or just use the index
+    const dayElement = document.getElementById(`day-${todayIndex}`);
+    if(dayElement) dayElement.classList.add('today');
 
-        // 3. Load Data
-        let streak = parseInt(localStorage.getItem('focusStreak')) || 0;
-        let lastLogged = localStorage.getItem('lastDate');
-        
-        function updateUI() {
-            document.getElementById('count').innerText = streak;
-            if (lastLogged === new Date().toDateString()) {
-                document.getElementById('studyBtn').innerText = "Logged for Today ✓";
-                document.getElementById('studyBtn').disabled = true;
-                document.getElementById(`day-${todayIndex}`).classList.add('checked');
-                document.getElementById(`day-${todayIndex}`).innerText = "✓";
+    // 3. Load Data from Browser Brain
+    let streak = parseInt(localStorage.getItem('focusStreak')) || 0;
+    
+    function updateUI() {
+        const lastLogged = localStorage.getItem('lastDate');
+        const todayString = new Date().toDateString();
+        const studyBtn = document.getElementById('studyBtn');
+        const countDisplay = document.getElementById('count');
+        const fire = document.getElementById('fire');
+
+        countDisplay.innerText = streak;
+
+        // CHECK: If already logged today, LOCK the button immediately
+        if (lastLogged === todayString) {
+            studyBtn.innerText = "Logged for Today ✓";
+            studyBtn.disabled = true; // This makes it unclickable
+            studyBtn.style.opacity = "0.5";
+            
+            // Visual checkmark in the week bar
+            if(dayElement) {
+                dayElement.classList.add('checked');
+                dayElement.innerText = "✓";
+            }
+
+            // Visual reward for high streaks
+            if (streak >= 3) {
+                document.getElementById('msg').innerText = "You're on fire! 🔥";
+                fire.style.transform = "scale(1.3)";
+                countDisplay.style.color = "#ef4444";
             }
         }
+    }
 
-        function logStudy() {
-            streak++;
-            localStorage.setItem('focusStreak', streak);
-            localStorage.setItem('lastDate', new Date().toDateString());
-            updateUI();
+    function logStudy() {
+        const todayString = new Date().toDateString();
+        const lastLogged = localStorage.getItem('lastDate');
+
+        // Security check: even if the button isn't disabled, don't allow double log
+        if (lastLogged === todayString) {
+            return; 
         }
 
+        // Increase and Save
+        streak++;
+        localStorage.setItem('focusStreak', streak);
+        localStorage.setItem('lastDate', todayString);
+        
+        // Refresh the visuals immediately
         updateUI();
-    </script>
+    }
+
+    // Run on page load
+    updateUI();
+</script>
 </body>
 </html>
