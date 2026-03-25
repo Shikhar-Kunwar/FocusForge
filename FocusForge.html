@@ -96,6 +96,17 @@
 
     body.dark-theme .card h2 { color: #94a3b8; }
     body.dark-theme nav { background-color: #000000; }
+    .music-card { justify-content: space-around !important; padding: 15px !important; }
+
+.player-display { display: flex; align-items: center; gap: 10px; text-align: left; width: 100%; }
+#track-art { width: 50px; height: 50px; border-radius: 8px; object-fit: cover; }
+
+#seek-slider { width: 100%; cursor: pointer; accent-color: #f97316; margin: 10px 0; }
+
+.music-controls { display: flex; justify-content: center; gap: 20px; align-items: center; }
+.music-btn { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: inherit; transition: 0.2s; }
+.music-btn:hover { transform: scale(1.2); color: #f97316; }
+.main-play { font-size: 2rem; }
 
   </style>
 </head>
@@ -124,11 +135,27 @@
       <div class="sub-text">Check Progress</div>
     </a>
 
-    <div class="card">
-      <h2>LoFi Beats 🎧</h2>
-      <div style="font-size: 0.9rem;">🎵 Focus.mp3</div>
-      <div class="sub-text">Coming Soon</div>
+   <div class="card music-card">
+  <h2>LoFi Player 🎧</h2>
+  
+  <div class="player-display">
+    <img id="track-art" src="https://via.placeholder.com/60" alt="Art">
+    <div class="track-info">
+      <div id="track-name" style="font-weight: bold;">Select a Song</div>
+      <div id="track-next" style="font-size: 0.7rem; color: #94a3b8;">Next: --</div>
     </div>
+  </div>
+
+  <input type="range" id="seek-slider" min="0" max="100" value="0" onchange="seekTo()">
+
+  <div class="music-controls">
+    <button onclick="prevTrack()" class="music-btn">⏮</button>
+    <button onclick="playPauseTrack()" id="playpause-btn" class="music-btn main-play">▶</button>
+    <button onclick="nextTrack()" class="music-btn">⏭</button>
+  </div>
+
+  <audio id="music-player" src=""></audio>
+</div>
 
     <div class="card">
       <h2>Exams</h2>
@@ -160,6 +187,96 @@
       const savedStreak = localStorage.getItem('focusStreak') || 0;
       document.getElementById('dash-streak').innerText = savedStreak;
     };
+    let track_index = 0;
+let isPlaying = false;
+let updateTimer;
+
+const curr_track = document.getElementById('music-player');
+const playpause_btn = document.getElementById('playpause-btn');
+const track_art = document.getElementById('track-art');
+const track_name = document.getElementById('track-name');
+const track_next = document.getElementById('track-next');
+const seek_slider = document.getElementById('seek-slider');
+
+// YOUR SONG LIST
+const track_list = [
+  {
+    name: "Focus Flow",
+    artist: "Lofi Girl",
+    image: "https://images.unsplash.com/photo-1516280440614-37939bbacd81?w=100",
+    path: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
+  },
+  {
+    name: "Midnight Study",
+    artist: "Coffee Beats",
+    image: "https://images.unsplash.com/photo-1494232410401-ad00d5433cfa?w=100",
+    path: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3"
+  },
+  {
+    name: "Deep Work",
+    artist: "Ambient Sky",
+    image: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=100",
+    path: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3"
+  }
+];
+
+function loadTrack(index) {
+  clearInterval(updateTimer);
+  curr_track.src = track_list[index].path;
+  curr_track.load();
+
+  track_art.src = track_list[index].image;
+  track_name.innerText = track_list[index].name;
+  
+  // Show what's playing next
+  let nextIndex = (index + 1) % track_list.length;
+  track_next.innerText = "Next: " + track_list[nextIndex].name;
+
+  updateTimer = setInterval(seekUpdate, 1000);
+}
+
+function playPauseTrack() {
+  if (!isPlaying) playTrack();
+  else pauseTrack();
+}
+
+function playTrack() {
+  curr_track.play();
+  isPlaying = true;
+  playpause_btn.innerText = "⏸";
+}
+
+function pauseTrack() {
+  curr_track.pause();
+  isPlaying = false;
+  playpause_btn.innerText = "▶";
+}
+
+function nextTrack() {
+  track_index = (track_index + 1) % track_list.length;
+  loadTrack(track_index);
+  playTrack();
+}
+
+function prevTrack() {
+  track_index = (track_index - 1 + track_list.length) % track_list.length;
+  loadTrack(track_index);
+  playTrack();
+}
+
+function seekTo() {
+  let seekto = curr_track.duration * (seek_slider.value / 100);
+  curr_track.currentTime = seekto;
+}
+
+function seekUpdate() {
+  if (!isNaN(curr_track.duration)) {
+    seek_slider.value = curr_track.currentTime * (100 / curr_track.duration);
+  }
+}
+
+// Initialize the first song
+loadTrack(track_index);
   </script>
 
 </body>
