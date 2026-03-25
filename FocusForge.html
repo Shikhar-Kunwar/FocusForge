@@ -5,31 +5,40 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>FocusForge</title>
   <style>
-    /* ... Your existing CSS here ... */
-    
-    body { 
-      margin: 0; font-family: 'Segoe UI', sans-serif; 
-      background-color: #f4f6f9; color: #111827; 
-      transition: background 0.3s, color 0.3s;
+    /* 1. BASE STYLES */
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f4f6f9;
+      color: #111827;
+      transition: all 0.3s ease;
     }
 
-    /* DARK MODE STYLES */
-    body.dark-theme {
-      background-color: #0f172a; /* Deep Navy/Black */
-      color: #f1f5f9;
-    }
-
-    body.dark-theme .card {
-      background-color: #1e293b; /* Charcoal Gray cards */
+    /* 2. NAVIGATION */
+    nav {
+      background-color: #111827;
       color: white;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
 
-    body.dark-theme .card p, body.dark-theme .card h2 {
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      margin: 0;
+      padding: 0;
+    }
+
+    nav ul li a {
       color: white;
+      text-decoration: none;
+      font-weight: 500;
     }
 
-    /* Login Button Style */
     .login-btn {
       background-color: #3b82f6;
       color: white;
@@ -38,16 +47,58 @@
       border-radius: 6px;
       cursor: pointer;
       font-weight: 600;
+      transition: background 0.2s;
     }
 
-    /* ... rest of your dashboard/card CSS ... */
+    .login-btn:hover { background-color: #2563eb; }
+
+    /* 3. THE GRID (The fix for the "Mess") */
+    .dashboard {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      padding: 20px;
+    }
+
+    /* 4. CARD STYLES */
+    .card {
+      background-color: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      padding: 30px;
+      text-align: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+    }
+
+    /* 5. DARK MODE THEME */
+    body.dark-theme {
+      background-color: #0f172a;
+      color: #f1f5f9;
+    }
+
+    body.dark-theme nav { background-color: #000000; }
+
+    body.dark-theme .card {
+      background-color: #1e293b;
+      color: white;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    }
+
+    body.dark-theme .card p { color: #9ca3af; }
+    body.dark-theme .card h2 { color: #ffffff; }
+
   </style>
 </head>
-<body id="main-body">
+<body>
 
   <nav>
     <h1>FocusForge</h1>
-    <ul style="align-items: center;">
+    <ul>
       <li><a href="Timetable.html">Timetable</a></li>
       <li><button class="login-btn">Login / Sign Up</button></li>
       <li><button onclick="toggleDarkMode()" style="background:none; border:none; font-size: 1.5rem; cursor:pointer;">🌓</button></li>
@@ -55,41 +106,44 @@
   </nav>
 
   <div class="dashboard"> 
+
     <a href="Timer.html" style="text-decoration: none; color: inherit;">
       <div class="card">
         <h2>Pomodoro Timer</h2>
         <p style="font-size: 2rem; color: #10b981;">25:00</p>
-        <p>Click to Start</p>
+        <p>Click to Start Session</p>
       </div>
     </a>
 
-    <div class="card" onclick="updateStreak()">
+    <div class="card" onclick="updateStreak()" style="cursor: pointer;">
       <h2>Study Streak 🔥</h2>
-      <p id="streak-count" style="font-size: 2rem;">0 Days</p>
+      <p id="streak-count" style="font-size: 2.5rem; font-weight: bold;">0 Days</p>
       <p>Click to log today!</p>
     </div>
 
     <div class="card">
       <h2>LoFi Beats 🎧</h2>
       <p>🎵 Now Playing: Focus.mp3</p>
+      <p style="font-size: 0.8rem; margin-top: 10px; color: #6b7280;">Controls coming soon</p>
     </div>
 
     <div class="card">
       <h2>Upcoming Exams</h2>
-      <ul>
+      <ul style="list-style: none; padding: 0;">
         <li>Math - 20 Feb</li>
+        <li>Science - 22 Feb</li>
       </ul>
     </div>
 
     <div class="card">
       <h2>Study Hours</h2>
-      <p>0 / 6 hours today</p>
+      <p style="font-size: 1.5rem;">0 / 6 hours</p>
     </div>
+
   </div>
 
   <script>
     function toggleDarkMode() {
-      // This one line toggles the entire theme
       document.body.classList.toggle('dark-theme');
     }
 
@@ -99,5 +153,6 @@
       document.getElementById('streak-count').innerText = count + " Days";
     }
   </script>
+
 </body>
 </html>
