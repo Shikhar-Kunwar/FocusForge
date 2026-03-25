@@ -91,39 +91,50 @@
   </style>
 </head>
 <body>
-  <!-- Navigation -->
   <nav>
     <h1>FocusForge</h1>
     <ul>
-      <li><a href="#">Timetable</a></li>
-      <li><a href="#">Tasks</a></li>
-      <li><a href="#">Calendar</a></li>
+      <li><a href="Timetable.html">Timetable</a></li>
+      <li><button onclick="toggleDarkMode()" style="background:none; border:1px solid white; color:white; cursor:pointer; border-radius:5px;">🌓 Mode</button></li>
     </ul>
   </nav>
 
-  <!-- Dashboard -->
-<a href="Timer.html" style="text-decoration: none; color: inherit;">
-  <div class="card">
-    <h2>Pomodoro Timer</h2>
-    <p style="font-size: 2rem; color: #10b981;">25:00</p>
-    <p style="font-size: 0.8rem; color: #6b7280; margin-top: 10px;">Click to Start Session</p>
-  </div>
-</a>
+  <div class="dashboard"> 
 
-    <!-- Today's Subjects -->
-   <a href="Timetable.html" style="text-decoration: none; color: inherit;">
-  <div class="card">
-    <h2>Today's Subjects</h2>
-    <ul>
-      <li>Math</li>
-      <li>Science</li>
-      <li>English</li>
-    </ul>
-    <p style="font-size: 0.8rem; color: #6b7280; margin-top: 10px;">Click to view full timetable</p>
-  </div>
-</a>
+    <a href="Timer.html" style="text-decoration: none; color: inherit;">
+      <div class="card">
+        <h2>Pomodoro Timer</h2>
+        <p style="font-size: 2rem; color: #10b981;">25:00</p>
+        <p style="font-size: 0.8rem; color: #6b7280;">Click to Start</p>
+      </div>
+    </a>
 
-    <!-- Upcoming Exams -->
+    <a href="Timetable.html" style="text-decoration: none; color: inherit;">
+      <div class="card">
+        <h2>Today's Subjects</h2>
+        <ul>
+          <li>Math</li>
+          <li>Science</li>
+          <li>English</li>
+        </ul>
+        <p style="font-size: 0.8rem; color: #6b7280;">View Full Week</p>
+      </div>
+    </a>
+
+    <div class="card" onclick="updateStreak()">
+      <h2>Study Streak 🔥</h2>
+      <p id="streak-count" style="font-size: 2rem;">0 Days</p>
+      <p style="font-size: 0.8rem; color: #6b7280;">Click to log today!</p>
+    </div>
+
+    <div class="card">
+      <h2>LoFi Beats 🎧</h2>
+      <div style="background: #eee; padding: 10px; border-radius: 8px;">
+        <p>🎵 Now Playing: Focus.mp3</p>
+        <small>Audio controls coming soon...</small>
+      </div>
+    </div>
+
     <div class="card">
       <h2>Upcoming Exams</h2>
       <ul>
@@ -132,11 +143,33 @@
       </ul>
     </div>
 
-    <!-- Study Hours -->
     <div class="card">
       <h2>Study Hours</h2>
       <p>0 / 6 hours today</p>
     </div>
-  </div>
+
+  </div> <script>
+    // Dark Mode Function
+    function toggleDarkMode() {
+      const body = document.body;
+      const cards = document.querySelectorAll('.card');
+      
+      if (body.style.backgroundColor === 'rgb(17, 24, 39)') {
+        body.style.backgroundColor = '#f4f6f9';
+        body.style.color = '#111827';
+      } else {
+        body.style.backgroundColor = '#111827';
+        body.style.color = 'white';
+      }
+    }
+
+    // Streak Logic (Basic clicking)
+    let count = 0;
+    function updateStreak() {
+      count++;
+      document.getElementById('streak-count').innerText = count + " Days";
+      alert("Great job! Streak updated! 🔥");
+    }
+  </script>
 </body>
 </html>
