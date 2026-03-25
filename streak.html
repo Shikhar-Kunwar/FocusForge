@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Streak - FocusForge</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f4f6f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+            transition: background 0.5s;
+        }
+        .streak-container {
+            text-align: center;
+            background: white;
+            padding: 50px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .fire-icon {
+            font-size: 8rem;
+            transition: transform 0.3s ease, color 0.5s;
+            margin: 20px 0;
+            display: inline-block;
+        }
+        #streak-number { font-size: 4rem; font-weight: bold; margin: 0; }
+        #status-msg { font-size: 1.5rem; font-weight: 500; color: #4b5563; }
+        
+        button {
+            background: #111827; color: white; border: none;
+            padding: 15px 30px; border-radius: 10px;
+            font-size: 1.1rem; cursor: pointer; margin-top: 20px;
+        }
+        .back-btn { margin-top: 20px; text-decoration: none; color: #6b7280; }
+    </style>
+</head>
+<body>
+
+    <div class="streak-container">
+        <div id="fire" class="fire-icon">🔥</div>
+        <p id="streak-number">0</p>
+        <p id="status-msg">Ready to start?</p>
+        <button onclick="increaseStreak()">I Studied Today!</button>
+        <br><br>
+        <a href="FocusForge.html" class="back-link">← Back to Dashboard</a>
+    </div>
+
+    <script>
+        let streak = 0;
+        const fire = document.getElementById('fire');
+        const number = document.getElementById('streak-number');
+        const msg = document.getElementById('status-msg');
+
+        function increaseStreak() {
+            streak++;
+            updateUI();
+        }
+
+        function updateUI() {
+            number.innerText = streak;
+            
+            // 1. Change Message & Fire Size
+            if (streak >= 10) {
+                msg.innerText = "GODLIKE STATUS! 👑";
+                fire.style.transform = "scale(1.5)";
+                fire.style.filter = "drop-shadow(0 0 20px #ef4444)";
+            } else if (streak >= 5) {
+                msg.innerText = "YOU ARE ON FIRE! 🚀";
+                fire.style.transform = "scale(1.3)";
+                fire.style.filter = "drop-shadow(0 0 10px #f59e0b)";
+            } else if (streak >= 1) {
+                msg.innerText = "Heating up... 🌡️";
+                fire.style.transform = "scale(1.1)";
+            }
+
+            // 2. Change Colors based on achievement
+            if (streak >= 10) {
+                fire.style.color = "#7c3aed"; // Purple fire for 10 days
+            } else if (streak >= 3) {
+                fire.style.color = "#ef4444"; // Red fire for 3 days
+            } else {
+                fire.style.color = "#f59e0b"; // Orange/Yellow for 1 day
+            }
+        }
+    </script>
+</body>
+</html>
