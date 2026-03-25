@@ -64,7 +64,14 @@
     /* 5. PLAYER SPECIFIC */
     .player-display { display: flex; align-items: center; gap: 12px; width: 100%; }
     #track-art { width: 50px; height: 50px; border-radius: 8px; object-fit: cover; flex-shrink: 0; }
-    .track-info { text-align: left; display: flex; flex-direction: column; justify-content: center; overflow: hidden; }
+    .track-info { 
+  text-align: left; 
+  display: flex; 
+  flex-direction: column; 
+  justify-content: center; 
+  overflow: hidden;
+  line-height: 1.2; /* Add this line! */
+}
     #seek-slider { width: 100%; accent-color: #3b82f6; cursor: pointer; margin: 0; }
     .music-controls { display: flex; justify-content: center; gap: 20px; align-items: center; width: 100%; }
     .music-btn { background: none; border: none; font-size: 1.2rem; cursor: pointer; color: inherit; opacity: 0.8; }
@@ -158,10 +165,29 @@
     const curr_time = document.getElementById('current-time');
     const total_dur = document.getElementById('total-duration');
 
+    // --- UPDATED TRACK LIST ---
     const track_list = [
-      { name: "The Lazy Song", artist: "Bruno Mars", image: "lazy-art.jpg", path: "lazy-song.mp3" },
-      { name: "Focus Flow", artist: "Lofi Girl", image: "https://via.placeholder.com/50", path: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" }
+      { name: "AXIX", artist: "AXIX", image: "axix.jfif", path: "axix.mp3" },
+      { name: "Radiohead", artist: "Radiohead", image: "radio.png", path: "radio.mp3" },
+      { name: "Albatross", artist: "Albatross", image: "albatross.jfif", path: "albatross.mp3" }
     ];
+
+    function loadTrack(index) {
+      clearInterval(updateTimer);
+      curr_track.src = track_list[index].path;
+      curr_track.load();
+      
+      // Update Art and Song Title
+      track_art.src = track_list[index].image;
+      track_name.innerHTML = `<span style="display:block;">${track_list[index].name}</span>
+                              <span style="font-size:0.75rem; color:#94a3b8; font-weight:normal;">${track_list[index].artist}</span>`;
+      
+      // Update Next Track info
+      let nextIndex = (index + 1) % track_list.length;
+      track_next.innerText = "Next: " + track_list[nextIndex].name;
+      
+      updateTimer = setInterval(seekUpdate, 1000);
+    }
 
     function loadTrack(index) {
       clearInterval(updateTimer);
