@@ -3,92 +3,86 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Streak Tracker</title>
+    <title>Streak Tracker - FocusForge</title>
     <style>
         body { margin: 0; font-family: 'Segoe UI', sans-serif; background-color: #f4f6f9; display: flex; justify-content: center; align-items: center; min-height: 100vh; transition: 0.3s; }
         body.dark-theme { background-color: #0f172a; color: white; }
         
-        .streak-card { background: white; padding: 40px; border-radius: 24px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 80%; max-width: 600px; transition: 0.3s; }
-        body.dark-theme .streak-card { background: #1e293b; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .streak-card { background: white; padding: 40px; border-radius: 24px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 90%; max-width: 500px; }
+        body.dark-theme .streak-card { background: #1e293b; color: white; }
 
-        .fire-box { font-size: 6rem; margin: 10px 0; transition: 0.4s; filter: drop-shadow(0 0 10px rgba(255, 165, 0, 0.5)); }
-        .streak-num { font-size: 5rem; font-weight: 800; color: #f97316; margin: 0; line-height: 1; }
-        .days-label { font-size: 1.5rem; color: #f97316; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
-
-        /* Week Tracker */
-        .week-bar { display: flex; justify-content: center; gap: 10px; background: #f1f5f9; padding: 15px; border-radius: 15px; margin: 25px 0; }
+        .fire-icon { font-size: 6rem; filter: drop-shadow(0 0 15px rgba(255,165,0,0.4)); margin-bottom: 10px; }
+        .streak-num { font-size: 5rem; font-weight: 800; color: #f97316; margin: 0; }
+        
+        /* The Week Bar */
+        .week-bar { display: flex; justify-content: space-between; background: #f1f5f9; padding: 20px; border-radius: 15px; margin: 25px 0; }
         body.dark-theme .week-bar { background: #0f172a; }
-        .day-circle { width: 35px; height: 35px; border-radius: 50%; background: #cbd5e1; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: bold; color: white; transition: 0.3s; }
-        .day-circle.checked { background: #f97316; box-shadow: 0 0 10px #f97316; }
 
-        .msg-box { background: #111827; color: white; padding: 15px; border-radius: 12px; margin-top: 20px; font-weight: 500; }
-        .btn-study { background: #f97316; color: white; border: none; padding: 12px 25px; border-radius: 10px; font-weight: bold; cursor: pointer; margin-top: 15px; transition: 0.2s; }
-        .btn-study:hover { transform: scale(1.05); background: #ea580c; }
+        .day-slot { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+        .circle { width: 35px; height: 35px; border-radius: 50%; border: 2px solid #cbd5e1; display: flex; align-items: center; justify-content: center; font-weight: bold; transition: 0.3s; color: #94a3b8; }
+        
+        /* Highlight Today */
+        .circle.today { border-color: #3b82f6; color: #3b82f6; border-style: dashed; }
+        /* Checked Days */
+        .circle.checked { background: #10b981; border-color: #10b981; color: white; }
+
+        .btn-study { background: #f97316; color: white; border: none; padding: 15px 40px; border-radius: 12px; font-size: 1.1rem; font-weight: bold; cursor: pointer; }
+        .btn-study:disabled { background: #94a3b8; cursor: not-allowed; }
     </style>
 </head>
-<body id="streak-body">
+<body>
 
     <div class="streak-card">
-        <div id="fire-icon" class="fire-box">🔥</div>
+        <div class="fire-icon" id="fire">🔥</div>
         <p class="streak-num" id="count">0</p>
-        <p class="days-label">days streak</p>
+        <p style="text-transform: uppercase; font-weight: bold; color: #f97316;">Days Streak</p>
 
         <div class="week-bar">
-            <div class="day-circle" id="d0">M</div>
-            <div class="day-circle" id="d1">T</div>
-            <div class="day-circle" id="d2">W</div>
-            <div class="day-circle" id="d3">T</div>
-            <div class="day-circle" id="d4">F</div>
-            <div class="day-circle" id="d5">S</div>
-            <div class="day-circle" id="d6">S</div>
+            <div class="day-slot"><div class="circle" id="day-1">M</div><span>Mon</span></div>
+            <div class="day-slot"><div class="circle" id="day-2">T</div><span>Tue</span></div>
+            <div class="day-slot"><div class="circle" id="day-3">W</div><span>Wed</span></div>
+            <div class="day-slot"><div class="circle" id="day-4">T</div><span>Thu</span></div>
+            <div class="day-slot"><div class="circle" id="day-5">F</div><span>Fri</span></div>
+            <div class="day-slot"><div class="circle" id="day-6">S</div><span>Sat</span></div>
+            <div class="day-slot"><div class="circle" id="day-0">S</div><span>Sun</span></div>
         </div>
 
-        <div class="msg-box" id="msg">Keep the flame alive! 🕯️</div>
-        <button class="btn-study" onclick="logStudy()">I Studied Today!</button>
+        <h3 id="msg">You are on fire! 🔥</h3>
+        <button class="btn-study" id="studyBtn" onclick="logStudy()">I Studied Today!</button>
         <br><br>
-        <a href="FocusForge.html" style="color: #94a3b8; text-decoration: none; font-size: 0.9rem;">← Back to Dashboard</a>
+        <a href="FocusForge.html" style="text-decoration: none; color: #94a3b8;">← Back to Dashboard</a>
     </div>
 
     <script>
-        // Sync Dark Mode
+        // 1. Theme Check
         if (localStorage.getItem('theme') === 'dark') document.body.classList.add('dark-theme');
 
-        // Load Streak Data
+        // 2. Identify "Today" from System Clock
+        const todayIndex = new Date().getDay(); // 0=Sun, 1=Mon...
+        document.getElementById(`day-${todayIndex}`).classList.add('today');
+
+        // 3. Load Data
         let streak = parseInt(localStorage.getItem('focusStreak')) || 0;
-        let lastDate = localStorage.getItem('lastStudyDate');
+        let lastLogged = localStorage.getItem('lastDate');
         
-        function updateDisplay() {
+        function updateUI() {
             document.getElementById('count').innerText = streak;
-            const msg = document.getElementById('msg');
-            const fire = document.getElementById('fire-icon');
-            
-            if (streak >= 3) {
-                msg.innerHTML = "You're on fire! 🔥 Time to celebrate 🎊";
-                fire.style.transform = "scale(1.2)";
-                document.getElementById('count').style.color = "#ef4444";
+            if (lastLogged === new Date().toDateString()) {
+                document.getElementById('studyBtn').innerText = "Logged for Today ✓";
+                document.getElementById('studyBtn').disabled = true;
+                document.getElementById(`day-${todayIndex}`).classList.add('checked');
+                document.getElementById(`day-${todayIndex}`).innerText = "✓";
             }
         }
 
         function logStudy() {
-            const today = new Date().toDateString();
-            if (lastDate === today) {
-                alert("Already logged for today!");
-                return;
-            }
-
             streak++;
             localStorage.setItem('focusStreak', streak);
-            localStorage.setItem('lastStudyDate', today);
-            
-            // Highlight current day in the week bar
-            const dayIndex = (new Date().getDay() + 6) % 7; // Adjust Sunday start to Monday start
-            document.getElementById('d' + dayIndex).classList.add('checked');
-            document.getElementById('d' + dayIndex).innerHTML = "✓";
-            
-            updateDisplay();
+            localStorage.setItem('lastDate', new Date().toDateString());
+            updateUI();
         }
 
-        updateDisplay();
+        updateUI();
     </script>
 </body>
 </html>
