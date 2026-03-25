@@ -5,49 +5,70 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>FocusForge</title>
   <style>
-    body { margin: 0; font-family: 'Segoe UI', sans-serif; background-color: #f4f6f9; color: #111827; transition: 0.3s; }
+    /* 1. BASE THEME */
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f4f6f9;
+      color: #111827;
+      transition: background 0.3s, color 0.3s;
+    }
     body.dark-theme { background-color: #0f172a; color: #f1f5f9; }
 
-    nav { background-color: #111827; color: white; padding: 10px 30px; display: flex; justify-content: space-between; align-items: center; }
+    /* 2. NAVIGATION */
+    nav {
+      background-color: #111827;
+      color: white;
+      padding: 10px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    nav h1 { font-size: 1.4rem; margin: 0; }
     nav ul { list-style: none; display: flex; gap: 20px; align-items: center; margin: 0; }
+    nav a { color: white; text-decoration: none; font-size: 0.9rem; }
     .login-btn { background-color: #3b82f6; color: white; border: none; padding: 6px 15px; border-radius: 5px; cursor: pointer; font-weight: 600; }
 
-    /* UNIFORM GRID - 230px height for ALL cards */
+    /* 3. UNIFORM GRID LAYOUT */
     .dashboard {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      grid-auto-rows: 230px; 
+      grid-auto-rows: 230px; /* Uniform height for all cards */
       gap: 15px;
       padding: 20px;
       max-width: 1200px;
       margin: 0 auto;
     }
 
+    /* 4. CARD STYLING */
     .card {
       background-color: white;
       border-radius: 12px;
-      padding: 20px;
+      padding: 15px;
       text-align: center;
       display: flex;
       flex-direction: column;
-      justify-content: space-between; /* Spreads content top-to-bottom */
+      justify-content: space-between;
       align-items: center;
       box-shadow: 0 4px 6px rgba(0,0,0,0.05);
       border: 1px solid #e5e7eb;
       text-decoration: none;
       color: inherit;
+      transition: transform 0.2s;
     }
-
+    .card:hover { transform: translateY(-3px); }
     body.dark-theme .card { background-color: #1e293b; border-color: #334155; }
     .card h2 { font-size: 1rem; margin: 0; color: #6b7280; }
     body.dark-theme .card h2 { color: #94a3b8; }
 
-    /* PLAYER SPECIFIC STYLES */
-    .player-display { display: flex; align-items: center; gap: 12px; width: 100%; margin-top: 10px; }
-    #track-art { width: 50px; height: 50px; border-radius: 8px; object-fit: cover; }
+    /* 5. PLAYER SPECIFIC */
+    .player-display { display: flex; align-items: center; gap: 12px; width: 100%; }
+    #track-art { width: 50px; height: 50px; border-radius: 8px; object-fit: cover; flex-shrink: 0; }
+    .track-info { text-align: left; display: flex; flex-direction: column; justify-content: center; overflow: hidden; }
     #seek-slider { width: 100%; accent-color: #3b82f6; cursor: pointer; margin: 0; }
-    .music-controls { display: flex; justify-content: center; gap: 25px; align-items: center; width: 100%; }
-    .music-btn { background: none; border: none; font-size: 1.2rem; cursor: pointer; color: inherit; }
+    .music-controls { display: flex; justify-content: center; gap: 20px; align-items: center; width: 100%; }
+    .music-btn { background: none; border: none; font-size: 1.2rem; cursor: pointer; color: inherit; opacity: 0.8; }
+    .music-btn:hover { opacity: 1; color: #3b82f6; }
     .main-play { font-size: 1.8rem; }
   </style>
 </head>
@@ -56,7 +77,7 @@
   <nav>
     <h1>FocusForge</h1>
     <ul>
-      <li><a href="Timetable.html" style="color:white; text-decoration:none;">Timetable</a></li>
+      <li><a href="Timetable.html">Timetable</a></li>
       <li><button class="login-btn">Login / Sign Up</button></li>
       <li><button onclick="toggleDarkMode()" style="background:none; border:none; cursor:pointer; font-size: 1.2rem;">🌓</button></li>
     </ul>
@@ -66,7 +87,7 @@
     <a href="Timer.html" class="card">
       <h2>Pomodoro Timer</h2>
       <div style="font-size: 2.5rem; font-weight: bold; color: #10b981;">25:00</div>
-      <div style="font-size: 0.8rem; color: #9ca3af;">Click to start session</div>
+      <div style="font-size: 0.8rem; color: #9ca3af;">Click to Start Session</div>
     </a>
 
     <a href="streak.html" class="card">
@@ -78,14 +99,14 @@
     <div class="card">
       <h2>LoFi Player 🎧</h2>
       <div class="player-display">
-        <img id="track-art" src="https://via.placeholder.com/50" alt="Art">
-        <div style="text-align: left; overflow: hidden;">
-          <div id="track-name" style="font-weight: bold; font-size: 0.9rem; white-space: nowrap;">Lazy Song</div>
-          <div id="track-next" style="font-size: 0.7rem; color: #94a3b8;">Next: --</div>
+        <img id="track-art" src="lazy-art.jpg" alt="Art">
+        <div class="track-info">
+          <div id="track-name" style="font-weight: bold; font-size: 0.85rem; white-space: nowrap;">The Lazy Song</div>
+          <div id="track-next" style="font-size: 0.7rem; color: #94a3b8;">Next: Focus Flow</div>
         </div>
       </div>
       <div style="width: 100%;">
-        <input type="range" id="seek-slider" min="0" max="100" value="0" onchange="seekTo()">
+        <input type="range" id="seek-slider" min="0" max="100" value="0" oninput="isSeeking=true" onchange="seekTo()">
         <div style="display: flex; justify-content: space-between; font-size: 0.7rem; color: #94a3b8;">
           <span id="current-time">00:00</span>
           <span id="total-duration">00:00</span>
@@ -101,15 +122,16 @@
 
     <div class="card">
       <h2>Upcoming Exams</h2>
-      <div style="width: 100%; text-align: left; padding: 0 10px;">
+      <div style="width: 100%; text-align: left;">
         <p style="margin: 5px 0;">📚 Math - Feb 20</p>
         <p style="margin: 5px 0;">🧪 Science - Feb 22</p>
       </div>
-      <div></div> </div>
+      <div></div>
+    </div>
   </div>
 
   <script>
-    // THEME & STREAK SYNC
+    // --- THEME & STREAK SYNC ---
     function toggleDarkMode() {
       const isDark = document.body.classList.toggle('dark-theme');
       localStorage.setItem('theme', isDark ? 'dark' : 'light');
@@ -121,10 +143,12 @@
       loadTrack(track_index);
     };
 
-    // MUSIC LOGIC
+    // --- MUSIC PLAYER LOGIC ---
     let track_index = 0;
     let isPlaying = false;
+    let isSeeking = false;
     let updateTimer;
+
     const curr_track = document.getElementById('music-player');
     const playpause_btn = document.getElementById('playpause-btn');
     const track_art = document.getElementById('track-art');
@@ -155,10 +179,14 @@
     function pauseTrack() { curr_track.pause(); isPlaying = false; playpause_btn.innerText = "▶"; }
     function nextTrack() { track_index = (track_index + 1) % track_list.length; loadTrack(track_index); playTrack(); }
     function prevTrack() { track_index = (track_index - 1 + track_list.length) % track_list.length; loadTrack(track_index); playTrack(); }
-    function seekTo() { curr_track.currentTime = curr_track.duration * (seek_slider.value / 100); }
     
+    function seekTo() { 
+      curr_track.currentTime = curr_track.duration * (seek_slider.value / 100); 
+      isSeeking = false;
+    }
+
     function seekUpdate() {
-      if (!isNaN(curr_track.duration)) {
+      if (!isNaN(curr_track.duration) && !isSeeking) {
         seek_slider.value = curr_track.currentTime * (100 / curr_track.duration);
         let curM = Math.floor(curr_track.currentTime / 60);
         let curS = Math.floor(curr_track.currentTime % 60);
